@@ -1,26 +1,4 @@
 function main() {
-    // choose dirs
-    var srcDir = Folder.selectDialog("Choose Source Folder", "");
-    var outputDir = Folder.selectDialog("Choose Output Folder", "");
-
-    var myDocument = app.activeDocument;
-    var smartLayer = myDocument.activeLayer;
-
-    // get all files in srcDir
-    var fileList = srcDir.getFiles();
-
-    // replace smartLayer content
-    function replaceContents(newFile, sLayer) {
-        app.activeDocument.activeLayer = sLayer;
-        var idplacedLayerReplaceContents = stringIDToTypeID("placedLayerReplaceContents");
-        var desc3 = new ActionDescriptor();
-        var idnull = charIDToTypeID("null");
-        desc3.putPath(idnull, new File(newFile));
-        var idPgNm = charIDToTypeID("PgNm");
-        desc3.putInteger(idPgNm, 1);
-        executeAction(idplacedLayerReplaceContents, desc3, DialogModes.NO);
-        return app.activeDocument.activeLayer
-    };
 
     // save for web
     function saveForWeb(saveFile) {
@@ -39,27 +17,23 @@ function main() {
         activeDocument.exportDocument(saveFile, ExportType.SAVEFORWEB, sfwOptions);
     }
 
+    var doc = app.activeDocument;
+    var layers = doc.layers; // get artboards as top layers
+
+    // choose output dir
+    var outputDir = Folder.selectDialog("Choose Output Folder", "");
+
+    // TODO choose Gif duration or paste Action here
+
     // open each file as first layer and save as a gif
-    for (var i = 0; i < fileList.length; i++){
-
-        // open only files
-        if (fileList[i] instanceof File) {
-
-            // check if layer is SmartObject
-            if (smartLayer.kind == "LayerKind.SMARTOBJECT") {
-
-                // change Smartobject layer to fileList[i]
-                smartLayer = replaceContents(fileList[i], smartLayer);
-
-                // save as a Gif
-                var name = decodeURI(myDocument.name).replace(/\.[^\.]+$/, '');
-                var saveFile = new File(outputDir + "/" + name + "-" + (i + 1) + ".gif");
-                saveForWeb(saveFile);
-            } else {
-                alert("Selected Layer is not a smart object");
-                return;
-            }
-        }
+    for (var i = 0; i < layers.length; i++) {
+        doc.activeLayer = layers[i];
+        // TODO go through artboard's (slice's) layers
+        // TODO export all user's slices as a gif
+        //         // save as a Gif
+        //         var name = decodeURI(myDocument.name).replace(/\.[^\.]+$/, '');
+        //         var saveFile = new File(outputDir + "/" + name + "-" + (i + 1) + ".gif");
+        //         saveForWeb(saveFile);
     }
 }
 
