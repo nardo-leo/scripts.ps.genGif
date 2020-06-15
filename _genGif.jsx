@@ -44,15 +44,15 @@ function ExecuteOnAllLayersInSet(set, f) {
     var i = 0;
     while (i < set.artLayers.length) {
         SelectLayer(set.artLayers[i]);
-        f();
+        f(i);
         i++;
     }
 }
 
 
-function Action() {
+function Action(i) {
     ChangeLayerTLLength(-90, 0);
-    ChangeLayerTLLength(duration, 0);
+    ChangeLayerTLLength((duration * (i + 1)), 0);  // different length of frames
 }
 
 
@@ -81,16 +81,9 @@ function SelectLayer(layer) {
 (function main() {
     chooseDuration();
     ExecuteOnAllSets(doc);
+    // save as a Gif
+    var name = decodeURI(doc.name).replace(/\.[^\.]+$/, '');
+    var saveFile = new File(outputDir + '/' + name);
+    saveForWeb(saveFile);
+
 })();
-
-
-// open each file as first layer and save as a gif
-// for (var i = 0; i < layers.length; i++) {
-//     doc.activeLayer = layers[i];
-    // TODO go through artboard's (slice's) layers and move them
-    // TODO export all user's slices as a gif
-    //         // save as a Gif
-    //         var name = decodeURI(myDocument.name).replace(/\.[^\.]+$/, '');
-    //         var saveFile = new File(outputDir + '/' + name + '-' + (i + 1) + '.gif');
-    //         saveForWeb(saveFile);
-//     }
