@@ -1,4 +1,4 @@
-# Project Title
+# Gif generator
 
 Photoshop plugin, that creates Gif from artboars's layers.
 
