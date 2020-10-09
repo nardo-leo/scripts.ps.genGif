@@ -25,5 +25,3 @@ Restart Photoshop then go to File > Script to access.
 ## Authors
 
 * Leo Nardo
-
-See also the list of [contributors](http://192.168.88.240:3000/leonardo/scripts.ps.genGif) who participated in this project.
